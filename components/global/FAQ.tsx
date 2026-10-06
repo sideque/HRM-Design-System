@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Plus } from "lucide-react";
+import TextReveal from "@/components/ui/TextReveal";
 
 const faqs = [
   {
@@ -44,32 +45,40 @@ export default function FAQ() {
       <div className="mx-auto max-w-[1440px] px-6 py-24 sm:px-8 md:px-12 md:py-32 lg:px-16">
         <div className="grid gap-14 lg:grid-cols-[0.75fr_1.25fr] lg:gap-24">
           {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="lg:sticky lg:top-32 lg:h-fit"
-          >
-            <div className="flex items-center gap-3">
+          <div className="lg:sticky lg:top-32 lg:h-fit">
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="flex items-center gap-3"
+            >
               <span className="h-px w-8 bg-[#C9922E]" />
 
               <span className="font-[family-name:var(--font-work-sans)] text-[11px] font-semibold uppercase tracking-[0.2em] text-[#C9922E]">
                 FAQ
               </span>
-            </div>
+            </motion.div>
 
-            <h2 className="mt-6 max-w-md font-[family-name:var(--font-space-grotesk)] text-4xl font-medium leading-[1.02] tracking-[-0.045em] text-[#10243F] sm:text-5xl">
-              Questions,
-              <br />
-              <span className="text-[#C9922E]">answered.</span>
-            </h2>
+            <TextReveal
+              as="h2"
+              delay={0.1}
+              className="mt-6 max-w-md font-[family-name:var(--font-space-grotesk)] text-4xl font-medium leading-[1.02] tracking-[-0.045em] text-[#10243F] sm:text-5xl"
+            >
+              {"Questions,\nanswered."}
+            </TextReveal>
 
-            <p className="mt-6 max-w-sm font-[family-name:var(--font-work-sans)] text-sm leading-7 text-[#667085]">
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mt-6 max-w-sm font-[family-name:var(--font-work-sans)] text-sm leading-7 text-[#667085]"
+            >
               A quick overview of HRM Group, our businesses and how to get in
               touch with us.
-            </p>
-          </motion.div>
+            </motion.p>
+          </div>
 
           {/* FAQ List */}
           <div className="border-t border-[#10243F]/10">
@@ -85,6 +94,7 @@ export default function FAQ() {
                   transition={{
                     duration: 0.45,
                     delay: index * 0.05,
+                    ease: [0.22, 1, 0.36, 1],
                   }}
                   className="border-b border-[#10243F]/10"
                 >
@@ -92,23 +102,27 @@ export default function FAQ() {
                     type="button"
                     onClick={() => toggleFAQ(index)}
                     aria-expanded={isOpen}
-                    className="flex w-full items-center justify-between gap-6 py-6 text-left md:py-7"
+                    className="group flex w-full items-center justify-between gap-6 py-6 text-left md:py-7"
                   >
-                    <span className="font-[family-name:var(--font-space-grotesk)] text-lg font-medium tracking-[-0.02em] text-[#10243F] md:text-xl">
+                    <span
+                      className={`font-[family-name:var(--font-space-grotesk)] text-lg font-medium tracking-[-0.02em] transition-colors duration-300 md:text-xl ${
+                        isOpen ? "text-[#C9922E]" : "text-[#10243F] group-hover:text-[#C9922E]"
+                      }`}
+                    >
                       {faq.question}
                     </span>
 
                     <span
                       className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
                         isOpen
-                          ? "border-[#C9922E] bg-[#C9922E] text-[#10243F]"
-                          : "border-[#10243F]/15 text-[#10243F]"
+                          ? "border-[#C9922E] bg-[#C9922E] text-[#10243F] shadow-sm"
+                          : "border-[#10243F]/15 text-[#10243F] group-hover:border-[#C9922E]"
                       }`}
                     >
                       <Plus
                         size={17}
-                        strokeWidth={1.7}
-                        className={`transition-transform duration-300 ${
+                        strokeWidth={1.8}
+                        className={`transition-transform duration-300 ease-out ${
                           isOpen ? "rotate-45" : ""
                         }`}
                       />
@@ -123,11 +137,11 @@ export default function FAQ() {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{
                           height: {
-                            duration: 0.3,
+                            duration: 0.35,
                             ease: [0.22, 1, 0.36, 1],
                           },
                           opacity: {
-                            duration: 0.2,
+                            duration: 0.25,
                           },
                         }}
                         className="overflow-hidden"

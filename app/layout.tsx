@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Work_Sans } from "next/font/google";
 import "./globals.css";
+import SmoothScroll from "@/components/ui/SmoothScroll";
+import ScrollProgress from "@/components/ui/ScrollProgress";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -13,9 +15,9 @@ const workSans = Work_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "HRM Group | Building a Better Tomorrow",
+  title: "HRM Group | Infrastructure First. Everything After.",
   description:
-    "HRM Group — infrastructure, construction, real estate, trading, agriculture, logistics and more.",
+    "HRM Group — infrastructure, construction, real estate, trading, agriculture, logistics and enterprise.",
 };
 
 export default function RootLayout({
@@ -24,11 +26,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body
-        className={`${spaceGrotesk.variable} ${workSans.variable} antialiased`}
+        className={`${spaceGrotesk.variable} ${workSans.variable} bg-[#F7F5F0] text-[#182333] antialiased selection:bg-[#C9922E] selection:text-[#10243F]`}
       >
-        {children}
+        <ScrollProgress />
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   );

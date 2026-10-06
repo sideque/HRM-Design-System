@@ -25,7 +25,7 @@ export default function Navbar() {
 
     handleScroll();
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -59,7 +59,8 @@ export default function Navbar() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{
-          duration: 0.6,
+          duration: 0.8,
+          delay: 0.1,
           ease: [0.22, 1, 0.36, 1],
         }}
         className="fixed left-0 right-0 top-0 z-50 px-4 pt-4 md:px-6 md:pt-6"
@@ -67,10 +68,10 @@ export default function Navbar() {
         <nav
           className={`
             mx-auto flex max-w-[1440px] items-center justify-between
-            border transition-all duration-500
+            border transition-all duration-500 ease-out
             ${
               scrolled
-                ? "border-[#10243F]/10 bg-[#F7F5F0]/95 shadow-[0_10px_40px_rgba(16,36,63,0.08)] backdrop-blur-md"
+                ? "border-[#10243F]/10 bg-[#F7F5F0]/92 shadow-[0_10px_35px_rgba(16,36,63,0.06)] backdrop-blur-md"
                 : "border-transparent bg-transparent"
             }
             rounded-full px-4 py-3 md:px-5
@@ -80,17 +81,17 @@ export default function Navbar() {
           <Link
             href="/"
             onClick={closeMenu}
-            className="group flex items-center"
-            >
+            className="group flex items-center transition-opacity duration-300 hover:opacity-90"
+          >
             <Image
-                src="/NavLogo.svg"
-                alt="HRM Group"
-                width={150}
-                height={45}
-                priority
-                className="h-auto w-[140px] object-contain"
+              src="/NavLogo.svg"
+              alt="HRM Group"
+              width={150}
+              height={45}
+              priority
+              className="h-auto w-[135px] object-contain md:w-[145px]"
             />
-            </Link>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden items-center gap-1 lg:flex">
@@ -98,11 +99,11 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="group relative rounded-full px-4 py-2.5 font-[family-name:var(--font-work-sans)] text-sm font-medium text-[#10243F]/75 transition-colors duration-300 hover:text-[#10243F]"
+                className="group relative rounded-full px-4 py-2 font-[family-name:var(--font-work-sans)] text-sm font-medium text-[#10243F]/75 transition-colors duration-300 hover:text-[#10243F]"
               >
-                {item.label}
+                <span>{item.label}</span>
 
-                <span className="absolute bottom-1.5 left-1/2 h-px w-0 -translate-x-1/2 bg-[#C9922E] transition-all duration-300 group-hover:w-5" />
+                <span className="absolute bottom-1 left-1/2 h-[1.5px] w-0 -translate-x-1/2 bg-[#C9922E] transition-all duration-300 ease-out group-hover:w-6" />
               </Link>
             ))}
           </div>
@@ -110,11 +111,11 @@ export default function Navbar() {
           {/* Desktop CTA */}
           <Link
             href="/contact"
-            className="group hidden items-center gap-2 rounded-full bg-[#10243F] px-5 py-3 font-[family-name:var(--font-work-sans)] text-sm font-medium text-white transition-all duration-300 hover:bg-[#17365d] lg:flex"
+            className="group hidden items-center gap-2.5 rounded-full bg-[#10243F] px-5 py-2.5 font-[family-name:var(--font-work-sans)] text-sm font-medium text-white transition-all duration-300 hover:bg-[#17365d] hover:shadow-md lg:flex"
           >
             <span>Start a Conversation</span>
 
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#C9922E] text-[#10243F] transition-transform duration-300 group-hover:rotate-45">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#C9922E] text-[#10243F] transition-transform duration-300 ease-out group-hover:rotate-45">
               <ArrowUpRight size={14} strokeWidth={2.2} />
             </span>
           </Link>
@@ -125,12 +126,12 @@ export default function Navbar() {
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((prev) => !prev)}
-            className="flex h-11 w-11 items-center justify-center rounded-full bg-[#10243F] text-white transition-colors duration-300 hover:bg-[#17365d] lg:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-[#10243F] text-white transition-all duration-300 hover:bg-[#17365d] lg:hidden"
           >
             {menuOpen ? (
-              <X size={20} strokeWidth={1.8} />
+              <X size={19} strokeWidth={1.8} />
             ) : (
-              <Menu size={20} strokeWidth={1.8} />
+              <Menu size={19} strokeWidth={1.8} />
             )}
           </button>
         </nav>
@@ -165,7 +166,7 @@ export default function Navbar() {
                       onClick={closeMenu}
                       className="group flex items-center justify-between border-b border-white/10 py-5"
                     >
-                      <span className="font-[family-name:var(--font-space-grotesk)] text-3xl font-medium tracking-[-0.03em] text-white">
+                      <span className="font-[family-name:var(--font-space-grotesk)] text-3xl font-medium tracking-[-0.03em] text-white transition-colors duration-300 group-hover:text-[#C9922E]">
                         {item.label}
                       </span>
 
@@ -190,7 +191,7 @@ export default function Navbar() {
                 <Link
                   href="/contact"
                   onClick={closeMenu}
-                  className="group flex w-full items-center justify-between rounded-full bg-[#C9922E] px-6 py-4 font-[family-name:var(--font-work-sans)] text-sm font-semibold text-[#10243F]"
+                  className="group flex w-full items-center justify-between rounded-full bg-[#C9922E] px-6 py-4 font-[family-name:var(--font-work-sans)] text-sm font-semibold text-[#10243F] transition-all duration-300 active:scale-[0.98]"
                 >
                   <span>Start a Conversation</span>
 
@@ -201,9 +202,9 @@ export default function Navbar() {
               </motion.div>
 
               {/* Mobile Footer */}
-              <div className="mt-8 flex items-end justify-between">
+              <div className="mt-8 flex items-end justify-between border-t border-white/10 pt-6">
                 <div>
-                  <p className="font-[family-name:var(--font-space-grotesk)] text-sm font-semibold text-white">
+                  <p className="font-[family-name:var(--font-space-grotesk)] text-sm font-semibold tracking-wider text-white">
                     HRM GROUP
                   </p>
 

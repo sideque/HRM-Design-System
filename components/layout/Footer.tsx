@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import {
   FaLinkedinIn,
@@ -29,26 +30,32 @@ const footerLinks = {
 export default function Footer() {
   return (
     <footer className="bg-[#07182C] text-white">
-      <div className="mx-auto max-w-[1440px] px-6 sm:px-8 md:px-12 lg:px-16">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className="mx-auto max-w-[1440px] px-6 sm:px-8 md:px-12 lg:px-16"
+      >
         {/* Main footer */}
         <div className="grid gap-14 border-b border-white/10 py-16 md:py-20 lg:grid-cols-[1.2fr_0.6fr_0.8fr] lg:gap-20">
           {/* Brand */}
           <div>
-
             <Link
-            href="/"
-            className="inline-flex items-center"
-            aria-label="HRM Group home"
+              href="/"
+              className="inline-flex items-center transition-opacity duration-300 hover:opacity-90"
+              aria-label="HRM Group home"
             >
-            <Image
+              <Image
                 src="/Footer.svg"
                 alt="HRM Group"
                 width={150}
                 height={45}
                 priority
                 className="h-auto w-[140px] object-contain"
-            />
+              />
             </Link>
+
             <p className="mt-6 max-w-md font-[family-name:var(--font-work-sans)] text-sm leading-7 text-white/50">
               A diversified business group built on decades of experience,
               connected capabilities and a long-term approach to growth.
@@ -56,9 +63,9 @@ export default function Footer() {
 
             <Link
               href="/contact"
-              className="group mt-7 inline-flex items-center gap-3 font-[family-name:var(--font-work-sans)] text-sm font-medium text-white"
+              className="group mt-7 inline-flex items-center gap-3 font-[family-name:var(--font-work-sans)] text-sm font-medium text-white transition-colors duration-300 hover:text-[#C9922E]"
             >
-              Start a conversation
+              <span>Start a conversation</span>
 
               <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 transition-all duration-300 group-hover:border-[#C9922E] group-hover:bg-[#C9922E] group-hover:text-[#10243F] group-hover:rotate-45">
                 <ArrowUpRight size={15} />
@@ -77,7 +84,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="font-[family-name:var(--font-work-sans)] text-sm text-white/60 transition-colors duration-200 hover:text-white"
+                    className="font-[family-name:var(--font-work-sans)] text-sm text-white/60 transition-colors duration-200 hover:text-[#C9922E]"
                   >
                     {link.label}
                   </Link>
@@ -97,7 +104,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="font-[family-name:var(--font-work-sans)] text-sm text-white/60 transition-colors duration-200 hover:text-white"
+                    className="font-[family-name:var(--font-work-sans)] text-sm text-white/60 transition-colors duration-200 hover:text-[#C9922E]"
                   >
                     {link.label}
                   </Link>
@@ -126,7 +133,7 @@ export default function Footer() {
 
             <Link
               href="/contact"
-              className="mt-2 block font-[family-name:var(--font-work-sans)] text-sm text-white/70 transition-colors hover:text-[#C9922E]"
+              className="mt-2 block font-[family-name:var(--font-work-sans)] text-sm text-white/70 transition-colors duration-300 hover:text-[#C9922E]"
             >
               Contact HRM Group
             </Link>
@@ -134,29 +141,29 @@ export default function Footer() {
 
           <div className="flex items-start gap-3 lg:justify-end">
             <Link
-                href="#"
-                aria-label="LinkedIn"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/50 transition-all hover:border-[#C9922E] hover:text-[#C9922E]"
+              href="#"
+              aria-label="LinkedIn"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/50 transition-all duration-300 hover:scale-110 hover:border-[#C9922E] hover:bg-[#C9922E] hover:text-[#10243F]"
             >
-                <FaLinkedinIn size={15} />
+              <FaLinkedinIn size={14} />
             </Link>
 
             <Link
-                href="#"
-                aria-label="Instagram"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/50 transition-all hover:border-[#C9922E] hover:text-[#C9922E]"
+              href="#"
+              aria-label="Instagram"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/50 transition-all duration-300 hover:scale-110 hover:border-[#C9922E] hover:bg-[#C9922E] hover:text-[#10243F]"
             >
-                <FaInstagram size={15} />
+              <FaInstagram size={14} />
             </Link>
 
             <Link
-                href="#"
-                aria-label="Facebook"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/50 transition-all hover:border-[#C9922E] hover:text-[#C9922E]"
+              href="#"
+              aria-label="Facebook"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/50 transition-all duration-300 hover:scale-110 hover:border-[#C9922E] hover:bg-[#C9922E] hover:text-[#10243F]"
             >
-                <FaFacebookF size={15} />
+              <FaFacebookF size={14} />
             </Link>
-            </div>
+          </div>
         </div>
 
         {/* Bottom */}
@@ -168,20 +175,20 @@ export default function Footer() {
           <div className="flex gap-6">
             <Link
               href="/privacy-policy"
-              className="font-[family-name:var(--font-work-sans)] text-[11px] text-white/30 transition-colors hover:text-white/70"
+              className="font-[family-name:var(--font-work-sans)] text-[11px] text-white/30 transition-colors duration-200 hover:text-white/70"
             >
               Privacy Policy
             </Link>
 
             <Link
               href="/terms"
-              className="font-[family-name:var(--font-work-sans)] text-[11px] text-white/30 transition-colors hover:text-white/70"
+              className="font-[family-name:var(--font-work-sans)] text-[11px] text-white/30 transition-colors duration-200 hover:text-white/70"
             >
               Terms
             </Link>
           </div>
         </div>
-      </div>
+      </motion.div>
     </footer>
   );
 }
