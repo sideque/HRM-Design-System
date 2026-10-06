@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import {
   FaLinkedinIn,
@@ -33,17 +34,21 @@ export default function Footer() {
         <div className="grid gap-14 border-b border-white/10 py-16 md:py-20 lg:grid-cols-[1.2fr_0.6fr_0.8fr] lg:gap-20">
           {/* Brand */}
           <div>
-            <Link
-              href="/"
-              className="inline-flex items-center"
-              aria-label="HRM Group home"
-            >
-              {/* Replace with your actual logo */}
-              <span className="font-[family-name:var(--font-space-grotesk)] text-3xl font-semibold tracking-[-0.05em]">
-                HRM
-              </span>
-            </Link>
 
+            <Link
+            href="/"
+            className="inline-flex items-center"
+            aria-label="HRM Group home"
+            >
+            <Image
+                src="/Footer.svg"
+                alt="HRM Group"
+                width={150}
+                height={45}
+                priority
+                className="h-auto w-[140px] object-contain"
+            />
+            </Link>
             <p className="mt-6 max-w-md font-[family-name:var(--font-work-sans)] text-sm leading-7 text-white/50">
               A diversified business group built on decades of experience,
               connected capabilities and a long-term approach to growth.

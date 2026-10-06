@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 
@@ -79,24 +80,17 @@ export default function Navbar() {
           <Link
             href="/"
             onClick={closeMenu}
-            className="group flex items-center gap-3"
-          >
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#10243F] text-white">
-              <span className="font-[family-name:var(--font-space-grotesk)] text-sm font-bold tracking-tight">
-                HRM
-              </span>
-            </div>
-
-            <div className="hidden leading-none sm:block">
-              <p className="font-[family-name:var(--font-space-grotesk)] text-[15px] font-semibold tracking-[-0.02em] text-[#10243F]">
-                HRM GROUP
-              </p>
-
-              <p className="mt-1 font-[family-name:var(--font-work-sans)] text-[9px] font-medium uppercase tracking-[0.18em] text-[#667085]">
-                Since 1986
-              </p>
-            </div>
-          </Link>
+            className="group flex items-center"
+            >
+            <Image
+                src="/NavLogo.svg"
+                alt="HRM Group"
+                width={150}
+                height={45}
+                priority
+                className="h-auto w-[140px] object-contain"
+            />
+            </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden items-center gap-1 lg:flex">
