@@ -20,13 +20,18 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 30);
+      setScrolled(window.scrollY > 40);
     };
 
     handleScroll();
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -51,13 +56,22 @@ export default function Navbar() {
     };
   }, []);
 
-  const closeMenu = () => setMenuOpen(false);
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
 
   return (
     <>
+
       <motion.header
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{
+          opacity: 0,
+          y: -20,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
         transition={{
           duration: 0.8,
           delay: 0.1,
@@ -65,41 +79,50 @@ export default function Navbar() {
         }}
         className="fixed left-0 right-0 top-0 z-50 px-4 pt-4 md:px-6 md:pt-6"
       >
-        <nav
-          className={`
-            mx-auto flex max-w-[1440px] items-center justify-between
-            border transition-all duration-500 ease-out
-            ${
-              scrolled
-                ? "border-[#10243F]/10 bg-[#F7F5F0]/92 shadow-[0_10px_35px_rgba(16,36,63,0.06)] backdrop-blur-md"
-                : "border-transparent bg-transparent"
-            }
-            rounded-full px-4 py-3 md:px-5
-          `}
+        <motion.nav
+          animate={{
+            backgroundColor: scrolled
+              ? "rgba(7,24,44,0.72)"
+              : "rgba(7,24,44,0.32)",
+            borderColor: scrolled
+              ? "rgba(255,255,255,0.14)"
+              : "rgba(255,255,255,0.10)",
+            boxShadow: scrolled
+              ? "0 12px 40px rgba(0,0,0,0.20)"
+              : "0 8px 30px rgba(0,0,0,0.10)",
+          }}
+          transition={{
+            duration: 0.4,
+            ease: "easeOut",
+          }}
+          className="mx-auto flex max-w-[1440px] items-center justify-between rounded-full border px-4 py-3 backdrop-blur-xl md:px-5"
         >
-          {/* Logo */}
+
           <Link
             href="/"
             onClick={closeMenu}
             className="group flex items-center transition-opacity duration-300 hover:opacity-90"
           >
             <Image
-              src="/NavLogo.svg"
+              src="/Footer.svg"
               alt="HRM Group"
               width={150}
               height={45}
               priority
-              className="h-auto w-[135px] object-contain md:w-[145px]"
+              className="h-auto w-[130px] object-contain md:w-[145px]"
             />
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* =================================================
+              DESKTOP NAV
+          ================================================= */}
+
           <div className="hidden items-center gap-1 lg:flex">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="group relative rounded-full px-4 py-2 font-[family-name:var(--font-work-sans)] text-sm font-medium text-[#10243F]/75 transition-colors duration-300 hover:text-[#10243F]"
+                className="group relative rounded-full px-4 py-2 font-[family-name:var(--font-work-sans)] text-sm font-medium text-white/75 transition-colors duration-300 hover:text-white"
               >
                 <span>{item.label}</span>
 
@@ -108,25 +131,34 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Desktop CTA */}
+          {/* =================================================
+              CTA
+          ================================================= */}
+
           <Link
             href="/contact"
-            className="group hidden items-center gap-2.5 rounded-full bg-[#10243F] px-5 py-2.5 font-[family-name:var(--font-work-sans)] text-sm font-medium text-white transition-all duration-300 hover:bg-[#17365d] hover:shadow-md lg:flex"
+            className="group hidden items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.06] px-5 py-2.5 font-[family-name:var(--font-work-sans)] text-sm font-medium text-white backdrop-blur-md transition-all duration-300 hover:border-white/20 hover:bg-white/10 lg:flex"
           >
             <span>Start a Conversation</span>
 
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#C9922E] text-[#10243F] transition-transform duration-300 ease-out group-hover:rotate-45">
-              <ArrowUpRight size={14} strokeWidth={2.2} />
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#C9922E] text-[#10243F] transition-transform duration-300 group-hover:rotate-45">
+              <ArrowUpRight
+                size={14}
+                strokeWidth={2.2}
+              />
             </span>
           </Link>
 
-          {/* Mobile Menu Button */}
+          {/* =================================================
+              MOBILE
+          ================================================= */}
+
           <button
             type="button"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((prev) => !prev)}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-[#10243F] text-white transition-all duration-300 hover:bg-[#17365d] lg:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-white backdrop-blur-md transition-all duration-300 hover:bg-white/10 lg:hidden"
           >
             {menuOpen ? (
               <X size={19} strokeWidth={1.8} />
@@ -134,27 +166,43 @@ export default function Navbar() {
               <Menu size={19} strokeWidth={1.8} />
             )}
           </button>
-        </nav>
+        </motion.nav>
       </motion.header>
 
-      {/* Mobile Menu */}
+      {/* =====================================================
+          MOBILE MENU
+      ===================================================== */}
+
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.3,
+            }}
             className="fixed inset-0 z-40 bg-[#10243F] lg:hidden"
           >
             <div className="flex h-full flex-col px-6 pb-8 pt-28">
-              {/* Mobile Navigation */}
               <div className="flex flex-1 flex-col justify-center">
                 {navItems.map((item, index) => (
                   <motion.div
                     key={item.href}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
+                    initial={{
+                      opacity: 0,
+                      x: -20,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      x: 0,
+                    }}
                     transition={{
                       delay: index * 0.06,
                       duration: 0.4,
@@ -179,10 +227,17 @@ export default function Navbar() {
                 ))}
               </div>
 
-              {/* Mobile CTA */}
+              {/* CTA */}
+
               <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{
+                  opacity: 0,
+                  y: 15,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
                 transition={{
                   delay: 0.35,
                   duration: 0.4,
@@ -191,17 +246,18 @@ export default function Navbar() {
                 <Link
                   href="/contact"
                   onClick={closeMenu}
-                  className="group flex w-full items-center justify-between rounded-full bg-[#C9922E] px-6 py-4 font-[family-name:var(--font-work-sans)] text-sm font-semibold text-[#10243F] transition-all duration-300 active:scale-[0.98]"
+                  className="group flex w-full items-center justify-between rounded-full bg-[#C9922E] px-6 py-4 font-[family-name:var(--font-work-sans)] text-sm font-semibold text-[#10243F]"
                 >
                   <span>Start a Conversation</span>
 
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#10243F] text-[#C9922E] transition-transform duration-300 group-hover:rotate-45">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#10243F] text-[#C9922E]">
                     <ArrowUpRight size={16} />
                   </span>
                 </Link>
               </motion.div>
 
-              {/* Mobile Footer */}
+              {/* Footer */}
+
               <div className="mt-8 flex items-end justify-between border-t border-white/10 pt-6">
                 <div>
                   <p className="font-[family-name:var(--font-space-grotesk)] text-sm font-semibold tracking-wider text-white">
