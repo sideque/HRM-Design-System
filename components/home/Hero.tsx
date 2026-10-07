@@ -1,110 +1,88 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import {
-  motion,
-  AnimatePresence,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import Link from "next/link";
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
+import { ArrowUpRight, ChevronRight } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const divisions = [
   {
     number: "01",
     title: "Infrastructure",
     meta: "Telecom · Networks · Infrastructure",
-    image: "/images/infrastructure.svg",
+    image: "/images/infrastructure.webp",
   },
   {
     number: "02",
     title: "Construction",
     meta: "Construction · Projects · Execution",
-    image: "/images/construction.svg",
+    image: "/images/construction.webp",
   },
   {
     number: "03",
     title: "Realty",
     meta: "Real Estate · Development",
-    image: "/images/realty.svg",
+    image: "/images/realty.webp",
   },
   {
     number: "04",
     title: "Trading & Distribution",
     meta: "Trading · Distribution · Supply",
-    image: "/images/trading.svg",
+    image: "/images/trading.webp",
   },
   {
     number: "05",
     title: "Manpower Solutions",
     meta: "People · Workforce · Capability",
-    image: "/images/manpower.svg",
+    image: "/images/manpower.webp",
   },
   {
     number: "06",
     title: "Agro",
     meta: "Agriculture · Enterprise · Growth",
-    image: "/images/agro.svg",
+    image: "/images/agro.webp",
   },
 ];
 
 const SLIDE_DURATION = 4000;
 
 export default function Hero() {
-  const sectionRef = useRef<HTMLElement | null>(null);
-
   const [activeIndex, setActiveIndex] = useState(0);
   const [progress, setProgress] = useState(0);
 
-  /*
-   * Background scroll effect is kept subtle.
-   * The divisions themselves change automatically.
-   */
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"],
-  });
+  const activeDivision = divisions[activeIndex];
 
-  const backgroundScale = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [1, 1.08]
-  );
+  /* ---------------------------------------------
+     Background parallax
+  --------------------------------------------- */
+  const { scrollY } = useScroll();
 
-  const backgroundY = useTransform(
-    scrollYProgress,
-    [0, 1],
-    ["0%", "-5%"]
-  );
+  const backgroundY = useTransform(scrollY, [0, 800], [0, 100]);
+  const backgroundScale = useTransform(scrollY, [0, 800], [1.05, 1.12]);
 
-  /*
-   * AUTOMATIC DIVISION SLIDER
-   *
-   * 01 → 02 → 03 → 04 → 05 → 06 → 01
-   */
+  /* ---------------------------------------------
+     Automatic division rotation
+  --------------------------------------------- */
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveIndex((current) => {
-        return (current + 1) % divisions.length;
-      });
+      setActiveIndex((current) => (current + 1) % divisions.length);
     }, SLIDE_DURATION);
 
     return () => clearInterval(interval);
   }, []);
 
-  /*
-   * Smooth progress animation for the current division.
-   */
+  /* ---------------------------------------------
+     Progress animation
+  --------------------------------------------- */
   useEffect(() => {
     let animationFrame: number;
+
     const startTime = performance.now();
 
     const animateProgress = (currentTime: number) => {
       const elapsed = currentTime - startTime;
-      const percentage = Math.min(
-        elapsed / SLIDE_DURATION,
-        1
-      );
+      const percentage = Math.min(elapsed / SLIDE_DURATION, 1);
 
       setProgress(percentage);
 
@@ -115,19 +93,14 @@ export default function Hero() {
 
     animationFrame = requestAnimationFrame(animateProgress);
 
-    return () => {
-      cancelAnimationFrame(animationFrame);
-    };
+    return () => cancelAnimationFrame(animationFrame);
   }, [activeIndex]);
 
-  const activeDivision = divisions[activeIndex];
-
   return (
-    <section
-      ref={sectionRef}
-      className="relative h-[100svh] min-h-[700px] overflow-hidden bg-[#07182C]"
-    >
-
+    <section className="relative min-h-screen overflow-hidden bg-[#061326] text-white">
+      {/* =========================================================
+          BACKGROUND IMAGE
+      ========================================================= */}
       <motion.div
         className="absolute inset-0"
         style={{
@@ -135,441 +108,361 @@ export default function Hero() {
           y: backgroundY,
         }}
       >
-        <div className="absolute inset-0 bg-[#07182C]" />
-
-        {/* Subtle abstract background glow */}
-        <div className="absolute -left-[15%] top-[10%] h-[500px] w-[500px] rounded-full bg-[#C9922E]/[0.06] blur-[120px]" />
-
-        <div className="absolute -right-[10%] bottom-[5%] h-[450px] w-[450px] rounded-full bg-blue-400/[0.04] blur-[120px]" />
-
-        {/* Grid */}
-        <div
-          className="absolute inset-0 opacity-[0.035]"
-          style={{
-            backgroundImage: `
-              linear-gradient(
-                rgba(255,255,255,0.4) 1px,
-                transparent 1px
-              ),
-              linear-gradient(
-                90deg,
-                rgba(255,255,255,0.4) 1px,
-                transparent 1px
-              )
-            `,
-            backgroundSize: "80px 80px",
-          }}
+        <Image
+          src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2200&q=90"
+          alt="HRM infrastructure"
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
         />
+
+        {/* Dark blue image overlay */}
+        <div className="absolute inset-0 bg-[#061326]/55" />
+
+        {/* Left dark gradient */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#061326]/95 via-[#061326]/75 to-[#061326]/35" />
+
+        {/* Bottom fade */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#061326] via-transparent to-[#061326]/30" />
       </motion.div>
 
-      <div className="absolute inset-0 bg-[#061326]/45" />
+      {/* =========================================================
+          SUBTLE GOLD GLOW
+      ========================================================= */}
+      <div className="pointer-events-none absolute -left-[15%] top-[15%] h-[500px] w-[500px] rounded-full bg-[#C9922E]/[0.07] blur-[140px]" />
 
-      <div className="absolute inset-0 bg-gradient-to-r from-[#061326] via-[#061326]/90 to-[#061326]/40" />
+      <div className="pointer-events-none absolute -right-[10%] bottom-[10%] h-[450px] w-[450px] rounded-full bg-blue-400/[0.04] blur-[130px]" />
 
-      <div className="absolute inset-0 bg-gradient-to-t from-[#061326] via-transparent to-[#061326]/30" />
-
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1500px] flex-col px-6 pb-8 pt-24 sm:px-8 md:px-12 lg:px-16 lg:pt-28">
-
-        <motion.div
-          initial={{
-            opacity: 0,
-            y: 15,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            duration: 0.8,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-          className="flex items-center gap-4 text-[10px] font-medium uppercase tracking-[0.25em] text-white/50"
-        >
-          <span>HRM Group</span>
-
-          <span className="h-px w-8 bg-[#C9922E]/70" />
-
-          <span>Est. 1986</span>
-        </motion.div>
-
-        <div className="mt-10 grid flex-1 grid-cols-1 items-center gap-10 lg:mt-4 lg:grid-cols-[1fr_0.68fr] lg:gap-16">
-
-
-          <div className="max-w-[850px]">
-
-            {/* Eyebrow */}
-
+      {/* =========================================================
+          CONTENT
+      ========================================================= */}
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1440px] flex-col justify-center px-6 pb-24 pt-32 sm:px-10 lg:px-16 xl:px-20">
+        <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
+          {/* =====================================================
+              LEFT CONTENT
+          ===================================================== */}
+          <div className="max-w-[680px]">
+            {/* Small label */}
             <motion.div
-              initial={{
-                opacity: 0,
-                y: 20,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              transition={{
-                delay: 0.15,
-                duration: 0.7,
-                ease: [0.22, 1, 0.36, 1],
-              }}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
               className="mb-7 flex items-center gap-3"
             >
-              <span className="h-px w-8 bg-[#C9922E]" />
+              <span className="h-px w-10 bg-[#C9922E]" />
 
-              <span className="text-[11px] font-medium uppercase tracking-[0.24em] text-white/50">
-                Building the foundation
+              <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-white/55">
+                HRM Group
               </span>
             </motion.div>
 
-            {/* Main Heading */}
-
+            {/* Main heading */}
             <motion.h1
-              initial={{
-                opacity: 0,
-                y: 35,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{
-                delay: 0.25,
                 duration: 0.9,
+                delay: 0.1,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="max-w-[900px] text-[clamp(3.2rem,6.3vw,7rem)] font-medium leading-[0.88] tracking-[-0.055em] text-white"
+              className="text-[48px] font-medium leading-[0.98] tracking-[-0.045em] sm:text-[62px] lg:text-[76px] xl:text-[88px]"
             >
-              <span className="block">
-                Infrastructure
-              </span>
+              Building
+              <br />
 
-              <span className="block text-white/40">
-                first.
-              </span>
-
-              <span className="block">
-                Everything
-                <span className="text-[#C9922E]">
-                  {" "}after.
-                </span>
-              </span>
+              <span className="text-white/45">what matters.</span>
             </motion.h1>
 
             {/* Description */}
-
             <motion.p
-              initial={{
-                opacity: 0,
-                y: 25,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{
-                delay: 0.4,
                 duration: 0.8,
-                ease: [0.22, 1, 0.36, 1],
+                delay: 0.25,
               }}
-              className="mt-8 max-w-[560px] text-sm leading-7 text-white/50 sm:text-base"
+              className="mt-7 max-w-[560px] text-[15px] leading-7 text-white/55 sm:text-[16px]"
             >
-              From telecom infrastructure to construction,
-              realty, trading, manpower and agriculture —
-              HRM Group has built businesses around the
-              foundations that make progress possible.
+              A diversified group creating lasting value across
+              infrastructure, construction, realty, trading, manpower
+              solutions and agro.
             </motion.p>
 
             {/* CTA */}
-
             <motion.div
-              initial={{
-                opacity: 0,
-                y: 20,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{
-                delay: 0.55,
                 duration: 0.8,
-                ease: [0.22, 1, 0.36, 1],
+                delay: 0.4,
               }}
-              className="mt-9 flex flex-wrap items-center gap-3"
+              className="mt-9 flex flex-wrap items-center gap-4"
             >
-              <a
-                href="#divisions"
-                className="group inline-flex items-center gap-4 border border-[#C9922E] bg-[#C9922E] px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#07182C] transition-all duration-300 hover:bg-transparent hover:text-[#C9922E]"
+              <Link
+                href="/about"
+                className="group inline-flex items-center gap-3 rounded-full bg-[#C9922E] px-6 py-3.5 text-[12px] font-semibold uppercase tracking-[0.12em] text-[#061326] transition-all duration-300 hover:bg-[#d9a743]"
               >
-                Explore Divisions
+                Discover HRM
 
-                <span className="transition-transform duration-300 group-hover:translate-x-1">
-                  →
-                </span>
-              </a>
+                <ArrowUpRight
+                  size={15}
+                  strokeWidth={2}
+                  className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
+              </Link>
 
-              <a
-                href="#legacy"
-                className="inline-flex items-center gap-3 border border-white/15 px-5 py-3 text-[11px] font-medium uppercase tracking-[0.18em] text-white/70 transition-all duration-300 hover:border-white/35 hover:text-white"
+              <Link
+                href="/contact"
+                className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.03] px-6 py-3.5 text-[12px] font-medium uppercase tracking-[0.12em] text-white/75 backdrop-blur-sm transition-all duration-300 hover:border-white/30 hover:bg-white/[0.07] hover:text-white"
               >
-                Our Legacy
-              </a>
+                Get in touch
+
+                <ChevronRight
+                  size={14}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </Link>
             </motion.div>
-          </div>
 
-          <div className="relative hidden min-h-[500px] items-center justify-end lg:flex">
-
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeDivision.number}
-                initial={{
-                  opacity: 0,
-                  x: 35,
-                  scale: 0.97,
-                }}
-                animate={{
-                  opacity: 1,
-                  x: 0,
-                  scale: 1,
-                }}
-                exit={{
-                  opacity: 0,
-                  x: -25,
-                  scale: 0.98,
-                }}
-                transition={{
-                  duration: 0.8,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="relative w-full max-w-[410px]"
-              >
-                {/* Division number */}
-
-                <motion.div
-                  initial={{
-                    opacity: 0,
-                  }}
-                  animate={{
-                    opacity: 1,
-                  }}
-                  transition={{
-                    delay: 0.15,
-                    duration: 0.5,
-                  }}
-                  className="absolute -left-12 top-5 hidden text-[11px] font-medium tracking-[0.2em] text-white/30 xl:block"
-                >
-                  {activeDivision.number}
-                </motion.div>
-
-                {/* SVG CARD */}
-
-                <div className="relative aspect-[0.78] overflow-hidden border border-white/10 bg-[#0A2036]">
-
-                  <Image
-                    src={activeDivision.image}
-                    alt={activeDivision.title}
-                    fill
-                    priority={activeIndex === 0}
-                    className="object-cover"
-                    sizes="410px"
-                  />
-
-                  {/* Card overlay */}
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#061326] via-[#061326]/20 to-transparent" />
-
-                  <div className="absolute inset-0 ring-1 ring-inset ring-white/10" />
-
-                  {/* Bottom content */}
-
-                  <div className="absolute inset-x-0 bottom-0 p-6">
-
-                    <motion.div
-                      initial={{
-                        opacity: 0,
-                        y: 10,
-                      }}
-                      animate={{
-                        opacity: 1,
-                        y: 0,
-                      }}
-                      transition={{
-                        delay: 0.2,
-                        duration: 0.5,
-                      }}
-                      className="mb-3 text-[10px] uppercase tracking-[0.25em] text-[#C9922E]"
-                    >
-                      {activeDivision.meta}
-                    </motion.div>
-
-                    <motion.h2
-                      initial={{
-                        opacity: 0,
-                        y: 12,
-                      }}
-                      animate={{
-                        opacity: 1,
-                        y: 0,
-                      }}
-                      transition={{
-                        delay: 0.25,
-                        duration: 0.5,
-                      }}
-                      className="text-2xl font-medium tracking-[-0.03em] text-white"
-                    >
-                      {activeDivision.title}
-                    </motion.h2>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
-
-        <div className="mt-8 lg:hidden">
-
-          <AnimatePresence mode="wait">
+            {/* =================================================
+                SMALL STATS
+            ================================================= */}
             <motion.div
-              key={activeDivision.number}
-              initial={{
-                opacity: 0,
-                y: 20,
-                scale: 0.98,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-                scale: 1,
-              }}
-              exit={{
-                opacity: 0,
-                y: -15,
-                scale: 0.98,
-              }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{
-                duration: 0.65,
-                ease: [0.22, 1, 0.36, 1],
+                duration: 0.8,
+                delay: 0.55,
               }}
-              className="relative aspect-[16/9] overflow-hidden border border-white/10 bg-[#0A2036]"
+              className="mt-12 flex flex-wrap items-center gap-x-10 gap-y-5"
             >
-              <Image
-                src={activeDivision.image}
-                alt={activeDivision.title}
-                fill
-                priority={activeIndex === 0}
-                className="object-cover"
-                sizes="100vw"
-              />
-
-              <div className="absolute inset-0 bg-gradient-to-t from-[#061326] via-transparent to-transparent" />
-
-              <div className="absolute bottom-0 left-0 right-0 p-5">
-                <p className="text-[9px] uppercase tracking-[0.22em] text-[#C9922E]">
-                  {activeDivision.meta}
+              <div>
+                <p className="text-[25px] font-medium tracking-tight text-white">
+                  06
                 </p>
 
-                <h2 className="mt-2 text-xl font-medium text-white">
-                  {activeDivision.title}
-                </h2>
+                <p className="mt-1 text-[9px] uppercase tracking-[0.2em] text-white/35">
+                  Business Divisions
+                </p>
+              </div>
+
+              <div className="h-8 w-px bg-white/10" />
+
+              <div>
+                <p className="text-[25px] font-medium tracking-tight text-white">
+                  360°
+                </p>
+
+                <p className="mt-1 text-[9px] uppercase tracking-[0.2em] text-white/35">
+                  Integrated Growth
+                </p>
+              </div>
+
+              <div className="h-8 w-px bg-white/10" />
+
+              <div>
+                <p className="text-[25px] font-medium tracking-tight text-white">
+                  UAE
+                </p>
+
+                <p className="mt-1 text-[9px] uppercase tracking-[0.2em] text-white/35">
+                  Based Group
+                </p>
               </div>
             </motion.div>
-          </AnimatePresence>
+          </div>
 
-        </div>
+          {/* =====================================================
+              RIGHT DIVISION CARD
+          ===================================================== */}
+          <div className="relative mx-auto w-full max-w-[560px] lg:ml-auto">
+            {/* Card glow */}
+            <div className="absolute -inset-8 rounded-[40px] bg-[#C9922E]/[0.04] blur-3xl" />
 
-        <div className="mt-8 border-t border-white/10 pt-5 lg:mt-5">
-
-          <div className="flex items-center justify-between">
-
-            {/* Current number */}
-
-            <div className="flex items-center gap-4">
-
-              <div className="flex items-center gap-2">
-
+            <div className="relative">
+              {/* =================================================
+                  IMAGE CARD
+              ================================================= */}
+              <div className="relative aspect-[4/3] overflow-hidden rounded-[26px] border border-white/10 bg-[#08182b]/80 shadow-2xl backdrop-blur-sm">
                 <AnimatePresence mode="wait">
-                  <motion.span
+                  <motion.div
                     key={activeDivision.number}
                     initial={{
                       opacity: 0,
-                      y: 8,
+                      scale: 1.04,
                     }}
                     animate={{
                       opacity: 1,
-                      y: 0,
+                      scale: 1,
                     }}
                     exit={{
                       opacity: 0,
-                      y: -8,
+                      scale: 0.98,
                     }}
                     transition={{
-                      duration: 0.3,
+                      duration: 0.7,
+                      ease: [0.22, 1, 0.36, 1],
                     }}
-                    className="text-xs font-medium tracking-[0.18em] text-white"
+                    className="absolute inset-0"
                   >
-                    {activeDivision.number}
-                  </motion.span>
+                    <Image
+                      src={activeDivision.image}
+                      alt={activeDivision.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 560px"
+                    />
+
+                    {/* Image overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#061326]/95 via-[#061326]/20 to-transparent" />
+
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#061326]/35 to-transparent" />
+                  </motion.div>
                 </AnimatePresence>
 
-                <span className="text-xs tracking-[0.18em] text-white/25">
-                  / 06
+                {/* Top number */}
+                <div className="absolute left-6 top-6 flex items-center gap-3">
+                  <span className="text-[11px] font-medium tracking-[0.18em] text-[#C9922E]">
+                    DIVISION
+                  </span>
+
+                  <span className="h-px w-8 bg-[#C9922E]/60" />
+
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={activeDivision.number}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.35 }}
+                      className="text-[11px] tracking-[0.15em] text-white/55"
+                    >
+                      {activeDivision.number}
+                    </motion.span>
+                  </AnimatePresence>
+                </div>
+
+                {/* Bottom information */}
+                <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-7">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeDivision.title}
+                      initial={{ opacity: 0, y: 18 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -12 }}
+                      transition={{
+                        duration: 0.5,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                    >
+                      <h2 className="max-w-[450px] text-[30px] font-medium tracking-[-0.03em] text-white sm:text-[38px]">
+                        {activeDivision.title}
+                      </h2>
+
+                      <p className="mt-2 text-[11px] uppercase tracking-[0.16em] text-white/45 sm:text-[12px]">
+                        {activeDivision.meta}
+                      </p>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+
+                {/* Corner accent */}
+                <div className="absolute right-5 top-5 h-8 w-8 border-r border-t border-[#C9922E]/60" />
+
+                <div className="absolute bottom-5 right-5 h-8 w-8 border-b border-r border-[#C9922E]/60" />
+              </div>
+
+              {/* =================================================
+                  DIVISION NAVIGATION
+              ================================================= */}
+              <div className="mt-5 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  {divisions.map((division, index) => (
+                    <button
+                      key={division.number}
+                      type="button"
+                      onClick={() => {
+                        setActiveIndex(index);
+                      }}
+                      aria-label={`Show ${division.title}`}
+                      className="group relative h-1.5 overflow-hidden rounded-full bg-white/15 transition-all duration-300"
+                      style={{
+                        width: index === activeIndex ? 46 : 18,
+                      }}
+                    >
+                      <motion.span
+                        className="absolute inset-y-0 left-0 rounded-full bg-[#C9922E]"
+                        initial={{ width: "0%" }}
+                        animate={{
+                          width:
+                            index === activeIndex
+                              ? `${progress * 100}%`
+                              : index < activeIndex
+                                ? "100%"
+                                : "0%",
+                        }}
+                        transition={{
+                          duration: 0.05,
+                          ease: "linear",
+                        }}
+                      />
+                    </button>
+                  ))}
+                </div>
+
+                <span className="text-[10px] uppercase tracking-[0.2em] text-white/30">
+                  {String(activeIndex + 1).padStart(2, "0")} /{" "}
+                  {String(divisions.length).padStart(2, "0")}
                 </span>
               </div>
-
-              <span className="hidden text-[10px] uppercase tracking-[0.2em] text-white/30 sm:block">
-                Our divisions
-              </span>
             </div>
-
-            {/* Progress */}
-
-            <div className="relative h-px w-28 overflow-hidden bg-white/10 sm:w-40">
-
-              <motion.div
-                className="absolute inset-y-0 left-0 origin-left bg-[#C9922E]"
-                style={{
-                  scaleX: progress,
-                }}
-              />
-
-            </div>
-          </div>
-
-          {/* Six indicators */}
-
-          <div className="mt-4 hidden grid-cols-6 gap-2 md:grid">
-
-            {divisions.map((division, index) => (
-              <div
-                key={division.number}
-                className="relative h-px overflow-hidden bg-white/10"
-              >
-
-                <motion.div
-                  className="absolute inset-0 origin-left bg-[#C9922E]"
-                  animate={{
-                    scaleX:
-                      index === activeIndex
-                        ? progress
-                        : index < activeIndex
-                        ? 1
-                        : 0,
-                  }}
-                  transition={{
-                    duration: 0.15,
-                    ease: "linear",
-                  }}
-                />
-
-              </div>
-            ))}
-
           </div>
         </div>
       </div>
 
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-[20%] bg-gradient-to-l from-[#061326]/20 to-transparent" />
+      {/* =========================================================
+          BOTTOM SCROLL INDICATOR
+      ========================================================= */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2, duration: 0.8 }}
+        className="absolute bottom-7 left-6 z-20 hidden items-center gap-4 sm:left-10 lg:flex"
+      >
+        <div className="relative h-10 w-px overflow-hidden bg-white/10">
+          <motion.div
+            animate={{
+              y: ["-100%", "100%"],
+            }}
+            transition={{
+              duration: 1.8,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+            className="absolute left-0 top-0 h-1/2 w-full bg-[#C9922E]"
+          />
+        </div>
+
+        <span className="text-[9px] uppercase tracking-[0.25em] text-white/30">
+          Scroll to explore
+        </span>
+      </motion.div>
+
+      {/* =========================================================
+          MOBILE DIVISION INDICATOR
+      ========================================================= */}
+      <div className="absolute bottom-7 right-6 z-20 flex items-center gap-3 sm:right-10 lg:hidden">
+        <span className="text-[10px] tracking-[0.15em] text-white/35">
+          {activeDivision.number}
+        </span>
+
+        <div className="h-px w-8 bg-[#C9922E]/50" />
+
+        <span className="text-[10px] uppercase tracking-[0.18em] text-white/35">
+          HRM Group
+        </span>
+      </div>
     </section>
   );
 }

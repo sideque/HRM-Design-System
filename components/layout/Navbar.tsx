@@ -113,10 +113,6 @@ export default function Navbar() {
             />
           </Link>
 
-          {/* =================================================
-              DESKTOP NAV
-          ================================================= */}
-
           <div className="hidden items-center gap-1 lg:flex">
             {navItems.map((item) => (
               <Link
@@ -131,9 +127,6 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* =================================================
-              CTA
-          ================================================= */}
 
           <Link
             href="/contact"
@@ -148,10 +141,6 @@ export default function Navbar() {
               />
             </span>
           </Link>
-
-          {/* =================================================
-              MOBILE
-          ================================================= */}
 
           <button
             type="button"
@@ -168,10 +157,6 @@ export default function Navbar() {
           </button>
         </motion.nav>
       </motion.header>
-
-      {/* =====================================================
-          MOBILE MENU
-      ===================================================== */}
 
       <AnimatePresence>
         {menuOpen && (
