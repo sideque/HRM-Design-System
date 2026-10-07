@@ -11,37 +11,37 @@ const divisions = [
     number: "01",
     title: "Infrastructure",
     meta: "Telecom · Networks · Infrastructure",
-    image: "/images/infrastructure.webp",
+    image: "/Images/infrastructure.webp",
   },
   {
     number: "02",
     title: "Construction",
     meta: "Construction · Projects · Execution",
-    image: "/images/construction.webp",
+    image: "/Images/construction.webp",
   },
   {
     number: "03",
     title: "Realty",
     meta: "Real Estate · Development",
-    image: "/images/realty.webp",
+    image: "/Images/realty.webp",
   },
   {
     number: "04",
     title: "Trading & Distribution",
     meta: "Trading · Distribution · Supply",
-    image: "/images/trading.webp",
+    image: "/Images/trading.webp",
   },
   {
     number: "05",
     title: "Manpower Solutions",
     meta: "People · Workforce · Capability",
-    image: "/images/manpower.webp",
+    image: "/Images/manpower.webp",
   },
   {
     number: "06",
     title: "Agro",
     meta: "Agriculture · Enterprise · Growth",
-    image: "/images/agro.webp",
+    image: "/Images/agro.webp",
   },
 ];
 
